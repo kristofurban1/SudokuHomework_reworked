@@ -1,0 +1,12 @@
+{
+    "configurations": [
+    {
+        "name": "Makefile run",
+        "request": "launch",
+        "type": "cppvsdbg",
+        "preLaunchTask": "Makefile Compile",
+        "cwd": "${workspaceFolder}/Sudoku",
+        "program": "make"
+    }
+    ]
+}
