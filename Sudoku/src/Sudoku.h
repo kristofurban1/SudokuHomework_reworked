@@ -24,7 +24,7 @@ extern int GameAvailableHelp;
 extern bool AutoHelp;
 
 extern int GetBoardTotalSize();
-extern int GetBoardDimensions();
+extern int GetBoardDimension();
 extern int GetBoardSize();
 
 extern void GenerateBoard(int boardsize);

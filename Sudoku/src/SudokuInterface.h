@@ -8,6 +8,7 @@
 #include "debugmalloc.h"
 #include "WINDOW_PARAMETERS.h"
 #include "ErrorHandler.h"
+#include "FontManager.h"
 #include "GameState.h"
 #include "ColorPalette.h"
 
@@ -18,10 +19,10 @@ static SDL_Scancode keypress;
 
 static SDL_Point start;
 static SDL_Point end;
-static int cellSize;
 
 extern void GenerateSudoku(int size, int diff, bool hl, int cheat);
 
+extern void RenderHelpButton();
 extern void RenderBackButton();
 extern void RenderGrid();
 extern void RenderCell(int x, int y, int val, int visual);

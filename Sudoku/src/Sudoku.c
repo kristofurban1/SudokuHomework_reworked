@@ -15,7 +15,7 @@ bool AutoHelp = false;
 int GetBoardTotalSize(){
     return Sudoku_BoardDim * Sudoku_BoardDim;
 }
-int GetBoardDimensions(){
+int GetBoardDimension(){
     return Sudoku_BoardDim;
 }
 int GetBoardSize(){

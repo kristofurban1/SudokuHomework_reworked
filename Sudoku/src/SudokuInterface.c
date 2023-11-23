@@ -31,23 +31,51 @@ void GenerateSudoku(int size, int diff, bool hl, int cheat){
 
 static SDL_Point start;
 static SDL_Point end;
-static int cellSize;
+
+extern void RenderHelpButton(){
+    char text[10];
+    if (GameAvailableHelp < 0) sprintf(text, "Help");
+    else sprintf(text, "Help (%d)", GameAvailableHelp);
+
+    int render_w, render_h;
+    SDL_Texture *rendered_text = RenderFont(MainRenderer, GetFont(), text, C_White, &render_w, &render_h);
+    SDL_Rect rect;
+    rect.h = MainWindowHeight * 0.06;
+    rect.w = (int)(((float)rect.h / render_h) * render_w);
+    rect.x = (MainWindowWidth * 0.9) - rect.w;
+    rect.y = (MainWindowHeight * 0.01);
+
+    SetRenderDrawSDLColor(MainRenderer, C_DarkGreen);
+    SDL_Rect bg_rect;
+    bg_rect.w = rect.w * 1.1;
+    bg_rect.h = rect.h;
+    bg_rect.x = (MainWindowWidth * 0.9) - bg_rect.w;
+    bg_rect.y = rect.y - (rect.h * 0.1);
+    SDL_RenderFillRect(MainRenderer, &bg_rect);
+
+    SDL_RenderCopy(MainRenderer, rendered_text, NULL, &rect);
+    SDL_DestroyTexture(rendered_text);
+
+    if (SDL_PointInRect(&cursorClick, &bg_rect)){
+        printf("SudokuInterface: Help\n");
+    }
+}
 
 extern void RenderBackButton(){
     char *text = "Back";
     int render_w, render_h;
     SDL_Texture *rendered_text = RenderFont(MainRenderer, GetFont(), text, C_White, &render_w, &render_h);
     SDL_Rect rect;
-    rect.w = MainWindowWidth * 0.13;
-    rect.h = (int)(((float)rect.w / render_w) * render_h);
-    rect.x = (MainWindowWidth * 0.5) - (rect.w / 2);
-    rect.y = (MainWindowHeight * 0.9) - (rect.h / 2);
+    rect.h = MainWindowHeight * 0.06;
+    rect.w = (int)(((float)rect.h / render_h) * render_w);
+    rect.x = (MainWindowWidth * 0.99) - rect.w;
+    rect.y = (MainWindowHeight * 0.01);
 
     SetRenderDrawSDLColor(MainRenderer, C_DarkGreen);
     SDL_Rect bg_rect;
     bg_rect.w = rect.w * 1.1;
     bg_rect.h = rect.h;
-    bg_rect.x = (MainWindowWidth * 0.5) - (bg_rect.w / 2);
+    bg_rect.x = (MainWindowWidth * 0.99) - bg_rect.w;
     bg_rect.y = rect.y - (rect.h * 0.1);
     SDL_RenderFillRect(MainRenderer, &bg_rect);
 
@@ -63,11 +91,28 @@ extern void RenderBackButton(){
 }
 
 extern void RenderGrid(){
-    for (int i = 0; i < SudokuBoardSize + 1; i++)
+    int boardSize = end.x - start.x;
+    int cellSize  = boardSize / GetBoardDimension();
+    SetRenderDrawSDLColor(MainRenderer, C_Gray);
+    for (size_t i = 0; i < GetBoardDimension() + 1; i++)
     {
         int x = i * cellSize;
 
+        SDL_RenderDrawLine(MainRenderer, start.x + x, start.y, start.x + x, start.y + boardSize);
+        SDL_RenderDrawLine(MainRenderer, start.x, start.y + x, start.x + boardSize, start.y + x);
     }
+    
+    SetRenderDrawSDLColor(MainRenderer, C_Green);
+    for (int i = 0; i < GetBoardSize() + 1; i++)
+    {
+        int x = i * (cellSize * GetBoardSize());
+
+        printf("x: %d\n", x);
+
+        SDL_RenderDrawLine(MainRenderer, start.x + x, start.y, start.x + x, start.y + boardSize);
+        SDL_RenderDrawLine(MainRenderer, start.x, start.y + x, start.x + boardSize, start.y + x);
+    }
+    printf("\n");
     
 }
 extern void RenderCell(int x, int y, int val, int visual){
@@ -81,10 +126,10 @@ void SudokuInterface_MainLoop(SDL_Point cursorclick, SDL_Scancode _keypress){
     SetRenderDrawSDLColor(MainRenderer, C_Black);
     SDL_RenderClear(MainRenderer);
 
-    int w = MainWindowWidth * 0.7;
+    int w = MainWindowWidth * 0.85;
     int h = w;
-    if (MainWindowHeight * 0.7 < h){
-        h = MainWindowHeight * 0.7;
+    if (MainWindowHeight * 0.85 < h){
+        h = MainWindowHeight * 0.85;
         w = h;
     }
 
@@ -100,6 +145,9 @@ void SudokuInterface_MainLoop(SDL_Point cursorclick, SDL_Scancode _keypress){
     SetRenderDrawSDLColor(MainRenderer, C_DarkGray);
     SDL_RenderFillRect(MainRenderer, &bg);
 
+    RenderHelpButton();
     RenderBackButton();
     
+
+    RenderGrid();
 }

@@ -1,6 +1,6 @@
 #include "main.h"
 
-#define SHOW_SCREEN_DIV true
+#define SHOW_SCREEN_DIV false
 
 int MainWindowWidth  = Default_WIDTH;
 int MainWindowHeight = Default_HEIGHT;

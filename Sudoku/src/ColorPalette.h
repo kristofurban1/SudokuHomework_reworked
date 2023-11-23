@@ -8,7 +8,7 @@
 #define COLOR_DarkGreen     {70, 200, 30, 100}
 #define COLOR_White         {255, 255, 255, 255}
 #define COLOR_Gray          {80, 80, 80, 255}
-#define COLOR_DarkGray      {3, 3, 3, 100}
+#define COLOR_DarkGray      {20, 20, 20, 255}
 #define COLOR_Black         {0, 0, 0, 255}
 #define COLOR_Red           {255, 30, 30, 255}
 #define COLOR_Yellow        {255, 255, 30, 255}
