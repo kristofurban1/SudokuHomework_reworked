@@ -6,13 +6,25 @@
 #include <stdbool.h>
 
 #include "debugmalloc.h"
+#include "WINDOW_PARAMETERS.h"
 #include "ErrorHandler.h"
 #include "GameState.h"
-#include "main_menu.h"
+#include "ColorPalette.h"
 
 #include "Sudoku.h"
 
+static SDL_Point cursorClick;
+static SDL_Scancode keypress;
 
+static SDL_Point start;
+static SDL_Point end;
+static int cellSize;
+
+extern void GenerateSudoku(int size, int diff, bool hl, int cheat);
+
+extern void RenderBackButton();
+extern void RenderGrid();
+extern void RenderCell(int x, int y, int val, int visual);
 extern void SudokuInterface_MainLoop(SDL_Point cursorClick, SDL_Scancode keypress);
 
 #endif

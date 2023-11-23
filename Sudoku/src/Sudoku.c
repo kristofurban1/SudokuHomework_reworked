@@ -7,6 +7,7 @@ int *SudokuSolution = NULL;
 int *HighlightMap = NULL; // 0: normal; 1: Selected by user; 2: Highlighted; 4: Error
 int SelectedByUser = -1;
 
+int difficulty = 0;
 bool HighlightEnabled = false;
 int GameAvailableHelp = 0;
 bool AutoHelp = false;

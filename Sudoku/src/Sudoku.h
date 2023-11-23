@@ -18,6 +18,7 @@ extern int *SudokuSolution;
 extern int *HighlightMap; // 0: normal; 1: Selected by user; 2: Highlighted; 4: Error
 extern int SelectedByUser;
 
+extern int difficulty;
 extern bool HighlightEnabled;
 extern int GameAvailableHelp;
 extern bool AutoHelp;

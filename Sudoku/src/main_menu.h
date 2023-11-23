@@ -11,6 +11,7 @@
 #include "GameState.h"
 #include "ColorPalette.h"
 #include "datastructures.h"
+#include "SudokuInterface.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>

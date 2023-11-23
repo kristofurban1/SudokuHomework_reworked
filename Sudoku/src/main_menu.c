@@ -337,6 +337,7 @@ static void RenderStartButton(){
         printf("MainMenu: StartButtonClick\n");
         SetGameState(GS_SudokuState);
         SetSudokuState(GS_Sudoku);
+        GenerateSudoku(selectedSudokuSize, selectedDifficulty, selectedHighlight, selectedCheatLevel);
     }
 }
 
