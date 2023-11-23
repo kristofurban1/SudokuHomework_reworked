@@ -22,6 +22,17 @@ extern int main(int argc, char *argv[]) {
     SDL_FreeSurface(icon);
     free(icon_path);
 
+    struct SaveData* sd = ReadSaveData();
+    if (sd->u16CheatLevel < 0 || sd->u16CheatLevel > 7 ) sd->u16CheatLevel = 0;
+    if (sd->u16Difficulty < 0 || sd->u16Difficulty > 3 ) sd->u16Difficulty = 0;
+    if (sd->BoardSize < MIN_SUDOKUSIZE || sd->BoardSize > MAX_SUDOKUSIZE ) sd->BoardSize = 3;
+    MM_SetDefaultValues(sd->BoardSize, sd->u16Difficulty, sd->u16CheatLevel);
+    MainWindowWidth = sd->WindowWidth;
+    MainWindowHeight = sd->WindowHeight;
+    SDL_SetWindowSize(MainWindow, sd->WindowWidth, sd->WindowHeight);
+    free(sd);
+
+    
 
     SetGameState(GS_TitleScreen);
     SetSudokuState(GS_UNSET);

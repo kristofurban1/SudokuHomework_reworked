@@ -29,4 +29,14 @@ extern struct Leaderboard_Entry {
     long int    Seconds;
 } Leaderboard_Entry;
 
+
+extern struct SaveData {
+    int         BoardSize;
+    uint_16     u16Difficulty;
+    uint_16     u16CheatLevel;
+    
+    int   WindowWidth, WindowHeight;
+} SaveData;
+
+
 #endif

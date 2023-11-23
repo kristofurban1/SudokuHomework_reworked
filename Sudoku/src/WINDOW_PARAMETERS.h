@@ -12,7 +12,7 @@
 #define WindowPosX SDL_WINDOWPOS_CENTERED
 #define WindowPosY SDL_WINDOWPOS_CENTERED
 
-#define Default_WIDTH   800
+#define Default_WIDTH   600
 #define Default_HEIGHT  600
 
 #define Minimum_Width  400

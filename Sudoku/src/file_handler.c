@@ -22,6 +22,50 @@ char *AppendToBasePath(char *endOfPath, char *basePath){
     
     return final;
 }
+struct SaveData *GetDefaultSaveData(){
+    struct SaveData *def = malloc(sizeof(SaveData));
+        SetErrorIndentfyer("file_handler: GetDefaultSaveData"); malloc_verify(def);
+
+        def->BoardSize       = 3;
+        def->WindowWidth     = Default_WIDTH;
+        def->WindowHeight    = Default_HEIGHT;
+        def->u16Difficulty   = game_dif_EASY;
+        def->u16CheatLevel   = game_chlvl_NONE;
+    
+    return def;
+}
+
+void WriteSaveData(struct SaveData *data){
+    char *pszSaveDataPath = AppendToBasePath(PATH_SAVEDATA, BasePath);
+    FILE *fp = fopen(pszSaveDataPath, "w");
+    free(pszSaveDataPath);
+    fwrite(data, sizeof(SaveData), 1, fp);
+    fclose(fp);
+}
+
+struct SaveData *ReadSaveData(){
+    char *pszSaveDataPath = AppendToBasePath(PATH_SAVEDATA, BasePath);
+    FILE *fp = fopen(pszSaveDataPath, "r");
+    free(pszSaveDataPath);
+
+    if (fp == NULL) return NULL;
+
+    int bytes;
+    for(bytes = 0; getc(fp) != EOF; ++bytes);
+
+    if (bytes != sizeof(SaveData)) {
+        printf("%s corrupted. Loading defaults. (%d : %d)\n", PATH_SAVEDATA, bytes, sizeof(SaveData));
+        struct SaveData *def = GetDefaultSaveData();
+        return def;
+    }
+    fseek(fp, 0, SEEK_SET);
+
+    struct SaveData *data = malloc(sizeof(SaveData));
+    fread(data, sizeof(SaveData), 1, fp);
+    fclose(fp);
+
+    return data;
+}
 
 void WriteLeaderboard(struct Leaderboard_Entry *entries, int entryCount){
     char *pszLeaderboardPath = AppendToBasePath(PATH_LEADERBOARD, BasePath);
@@ -53,10 +97,17 @@ struct Leaderboard_Entry *ReadLeaderboard(int *entryCount_out){
 void FileHandler_Init(){
     BasePath = SDL_GetBasePath();
 
-
     char *dataFolder = AppendToBasePath(DIR_DATA, BasePath);
     mkdir(dataFolder);
     free(dataFolder);
+
+    char *pszSaveDataPath = AppendToBasePath(PATH_SAVEDATA, BasePath);
+    if (!FileExists(pszSaveDataPath)){
+        struct SaveData *def = GetDefaultSaveData();
+        WriteSaveData(def);
+        free(def);
+    }
+    free(pszSaveDataPath);
 
     char *pszLeaderboardPath = AppendToBasePath(PATH_LEADERBOARD, BasePath);
     if (!FileExists(pszLeaderboardPath)){
