@@ -40,16 +40,16 @@ extern void RenderHelpButton(){
     int render_w, render_h;
     SDL_Texture *rendered_text = RenderFont(MainRenderer, GetFont(), text, C_White, &render_w, &render_h);
     SDL_Rect rect;
-    rect.h = MainWindowHeight * 0.06;
+    rect.h = MainWindowHeight * 0.05;
     rect.w = (int)(((float)rect.h / render_h) * render_w);
-    rect.x = (MainWindowWidth * 0.9) - rect.w;
+    rect.x = (MainWindowWidth * 0.85) - rect.w;
     rect.y = (MainWindowHeight * 0.01);
 
     SetRenderDrawSDLColor(MainRenderer, C_DarkGreen);
     SDL_Rect bg_rect;
     bg_rect.w = rect.w * 1.1;
     bg_rect.h = rect.h;
-    bg_rect.x = (MainWindowWidth * 0.9) - bg_rect.w;
+    bg_rect.x = (MainWindowWidth * 0.85) - bg_rect.w;
     bg_rect.y = rect.y - (rect.h * 0.1);
     SDL_RenderFillRect(MainRenderer, &bg_rect);
 
@@ -66,7 +66,7 @@ extern void RenderBackButton(){
     int render_w, render_h;
     SDL_Texture *rendered_text = RenderFont(MainRenderer, GetFont(), text, C_White, &render_w, &render_h);
     SDL_Rect rect;
-    rect.h = MainWindowHeight * 0.06;
+    rect.h = MainWindowHeight * 0.05;
     rect.w = (int)(((float)rect.h / render_h) * render_w);
     rect.x = (MainWindowWidth * 0.99) - rect.w;
     rect.y = (MainWindowHeight * 0.01);
@@ -92,11 +92,11 @@ extern void RenderBackButton(){
 
 extern void RenderGrid(){
     int boardSize = end.x - start.x;
-    int cellSize  = boardSize / GetBoardDimension();
+    float cellSize  = (float)boardSize / GetBoardDimension();
     SetRenderDrawSDLColor(MainRenderer, C_Gray);
     for (size_t i = 0; i < GetBoardDimension() + 1; i++)
     {
-        int x = i * cellSize;
+        int x = (int)(i * cellSize + 0.5);
 
         SDL_RenderDrawLine(MainRenderer, start.x + x, start.y, start.x + x, start.y + boardSize);
         SDL_RenderDrawLine(MainRenderer, start.x, start.y + x, start.x + boardSize, start.y + x);
@@ -107,16 +107,46 @@ extern void RenderGrid(){
     {
         int x = i * (cellSize * GetBoardSize());
 
-        printf("x: %d\n", x);
-
         SDL_RenderDrawLine(MainRenderer, start.x + x, start.y, start.x + x, start.y + boardSize);
         SDL_RenderDrawLine(MainRenderer, start.x, start.y + x, start.x + boardSize, start.y + x);
     }
-    printf("\n");
     
 }
 extern void RenderCell(int x, int y, int val, int visual){
+    int boardSize = end.x - start.x;
+    float cellSize  = (float)boardSize / GetBoardDimension();
 
+    int posx = (int)(cellSize * x + 0.5);
+    int posy = (int)(cellSize * y + 0.5);
+    
+    SDL_Color color;
+    switch (visual)
+    {
+    case 0:
+        color = C_White;    // Default
+        break;
+    case 1:
+        color = C_Yellow;   // Highlight
+        break;
+    case 2: 
+        color = C_Red;      // Error
+        break;
+    default:
+        color = C_White; // Unknown
+        break;
+    }
+    char cellVal[2];
+    sprintf(cellVal, "%d" ,val);
+    int render_w, render_h;
+    SDL_Texture *rendered_text = RenderFont(MainRenderer, GetFont(), cellVal, color, &render_w, &render_h);
+    SDL_Rect rect;
+    rect.h = (int)(cellSize * 0.8 + 0.5) ;
+    rect.w = (int)(cellSize * 0.8 + 0.5);
+    rect.x = posx + start.x + (int)(cellSize * 0.1 + 0.5);;
+    rect.y = posy + start.y + (int)(cellSize * 0.2 + 0.5);;
+
+    SDL_RenderCopy(MainRenderer, rendered_text, NULL, &rect);
+    SDL_DestroyTexture(rendered_text);
 }
 
 void SudokuInterface_MainLoop(SDL_Point cursorclick, SDL_Scancode _keypress){
@@ -148,6 +178,15 @@ void SudokuInterface_MainLoop(SDL_Point cursorclick, SDL_Scancode _keypress){
     RenderHelpButton();
     RenderBackButton();
     
-
     RenderGrid();
+
+    int *board = GetBoard();
+    for (int i = 0; i < GetBoardTotalSize(); i++)
+    {
+        int x = i % GetBoardDimension();
+        int y = i / GetBoardDimension();
+
+        RenderCell(x, y, board[i], 1);
+    }
+    
 }

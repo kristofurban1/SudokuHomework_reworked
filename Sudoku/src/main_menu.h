@@ -22,7 +22,7 @@ extern void MM_SetDefaultValues(int size, int diff, int cheatlvl);
 extern void MM_GetDefaultValues(int *size, int *diff, int *cheatlvl);
 
 #define MIN_SUDOKUSIZE 2
-#define MAX_SUDOKUSIZE 8
+#define MAX_SUDOKUSIZE 6
 
 extern int selectedSudokuSize;
 extern int selectedDifficulty;

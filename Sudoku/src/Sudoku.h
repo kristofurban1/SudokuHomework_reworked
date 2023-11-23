@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include "debugmalloc.h"
 #include "ErrorHandler.h"
+#include "sudoku_tester.h"
 #include "backtracking.h"
 
 #define DifficultyEasy      0.8
@@ -26,6 +27,7 @@ extern bool AutoHelp;
 extern int GetBoardTotalSize();
 extern int GetBoardDimension();
 extern int GetBoardSize();
+extern int *GetBoard();
 
 extern void GenerateBoard(int boardsize);
 extern void SolveGame();
