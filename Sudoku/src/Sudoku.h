@@ -8,9 +8,9 @@
 #include "backtracking.h"
 
 #define DifficultyEasy      0.8
-#define DifficultyMedium    0.6
-#define DifficultyHard      0.4
-#define DifficultyExtreme   0.2
+#define DifficultyMedium    0.7
+#define DifficultyHard      0.6
+#define DifficultyExtreme   0.5
 
 extern int SudokuBoardSize;
 extern int Sudoku_BoardDim;
@@ -29,17 +29,9 @@ extern int GetBoardDimension();
 extern int GetBoardSize();
 extern int *GetBoard();
 
+extern void FreeBoards();
 extern void GenerateBoard(int boardsize);
 extern void SolveGame();
-
-extern int GetAreaFromPos(int pos);
-
-extern bool TestRowNum(int *board, int rowIndex, int num);
-extern bool TestRow(int *board, int rowIndex);
-extern bool TestColNum(int *board, int colIndex, int num);
-extern bool TestCol(int *board, int colIndex);
-extern bool TestAreaNum(int *board, int areaIndex, int num);
-extern bool TestArea(int *board, int areaIndex);
 
 extern void ResetHighlightMap();
 extern void ShowSelectedByUser();

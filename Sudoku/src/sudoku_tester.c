@@ -1,7 +1,7 @@
 #include "sudoku_tester.h"
 
 
-int GetAreaFromPos(int pos, int size){
+extern int GetAreaFromPos(int pos, int size){
     int dim = size * size;
 
     int pos_in_row = pos / dim;
@@ -15,7 +15,7 @@ int GetAreaFromPos(int pos, int size){
     return areaIndex;
 }
 
-bool TestRowNum(int *board, int rowIndex, int num, int size){
+extern bool TestRowNum(int *board, int rowIndex, int num, int size){
     int dim = size * size;
     bool found = false;
     for (int col = 0; col < dim; col++)
@@ -28,13 +28,13 @@ bool TestRowNum(int *board, int rowIndex, int num, int size){
     }
     return true;
 }
-bool TestRow(int *board, int rowIndex, int size){
+extern bool TestRow(int *board, int rowIndex, int size){
     for (size_t i = 1; i <= size * size; i++)
         if (!TestRowNum(board, rowIndex, i, size)) return false;
     return true;
 }
 
-bool TestColNum(int *board, int colIndex, int num, int size){
+extern bool TestColNum(int *board, int colIndex, int num, int size){
     int dim = size * size;
     bool found = false;
     for (int row = 0; row < dim; row++)
@@ -47,13 +47,13 @@ bool TestColNum(int *board, int colIndex, int num, int size){
     }
     return true;
 }
-bool TestCol(int *board, int colIndex, int size){
+extern bool TestCol(int *board, int colIndex, int size){
     for (size_t i = 1; i <= size * size; i++)
-        if (!TestColNum(board, colIndex, i)) return false;
+        if (!TestColNum(board, colIndex, i, size)) return false;
     return true;
 }
 
-bool TestAreaNum(int *board, int areaIndex, int num, int size){
+extern bool TestAreaNum(int *board, int areaIndex, int num, int size){
     int dim = size * size;
     bool found = false;
     int tmp = areaIndex * size;
@@ -73,7 +73,7 @@ bool TestAreaNum(int *board, int areaIndex, int num, int size){
     }
     return true;
 }
-bool TestArea(int *board, int areaIndex, int size){
+extern bool TestArea(int *board, int areaIndex, int size){
     for (int i = 0; i < size * size; i ++){
         if (!TestAreaNum(board, areaIndex, i, size)) return false;
     }

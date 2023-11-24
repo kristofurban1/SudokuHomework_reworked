@@ -24,7 +24,7 @@ void GenerateSudoku(int size, int diff, bool hl, int cheat){
         GameAvailableHelp = 0;
         break;
     }
-    
+    render_temp = &SudokuInterface_MainLoop;
     GenerateBoard(size);
 
 }
@@ -86,6 +86,7 @@ extern void RenderBackButton(){
         printf("SudokuInterface: BackButtonClick\n");
         SetGameState(GS_MainMenu);
         SetSudokuState(GS_UNSET);
+        FreeBoards();
     }
 
 }
@@ -113,6 +114,7 @@ extern void RenderGrid(){
     
 }
 extern void RenderCell(int x, int y, int val, int visual){
+    if (val == 0) return;
     int boardSize = end.x - start.x;
     float cellSize  = (float)boardSize / GetBoardDimension();
 
@@ -135,7 +137,7 @@ extern void RenderCell(int x, int y, int val, int visual){
         color = C_White; // Unknown
         break;
     }
-    char cellVal[2];
+    char cellVal[10];
     sprintf(cellVal, "%d" ,val);
     int render_w, render_h;
     SDL_Texture *rendered_text = RenderFont(MainRenderer, GetFont(), cellVal, color, &render_w, &render_h);
@@ -186,7 +188,7 @@ void SudokuInterface_MainLoop(SDL_Point cursorclick, SDL_Scancode _keypress){
         int x = i % GetBoardDimension();
         int y = i / GetBoardDimension();
 
-        RenderCell(x, y, board[i], 1);
+        RenderCell(x, y, board[i], 0);
     }
     
 }
