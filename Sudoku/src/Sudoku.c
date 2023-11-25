@@ -12,6 +12,12 @@ bool HighlightEnabled = false;
 int GameAvailableHelp = 0;
 bool AutoHelp = false;
 
+uint64_t SudokuTimerStart;
+
+extern int GetSudokuTimerStart(){
+    return SudokuTimerStart;
+}
+
 int GetBoardTotalSize(){
     return Sudoku_BoardDim * Sudoku_BoardDim;
 }
@@ -36,9 +42,11 @@ void FreeBoards(){
 }
 
 
-void GenerateBoard(int boardsize){
+void GenerateBoard(int boardsize, uint64_t timerStart){
     SudokuBoardSize = boardsize;
     Sudoku_BoardDim = boardsize * boardsize;
+
+    SudokuTimerStart = timerStart;
 
     int allocationSize = sizeof(int) * Sudoku_BoardDim * Sudoku_BoardDim;
 
@@ -105,9 +113,9 @@ void GenerateBoard(int boardsize){
 }
 
 static void CheckCompletion(){
-    /*for (int i = 0; i < GetBoardTotalSize(); i++)
+    for (int i = 0; i < GetBoardTotalSize(); i++)
         if (SudokuGame[i] == 0) return;
-    */
+    
     for (int i = 0; i < Sudoku_BoardDim; i++)
     {
         for (int val = 1; val <= Sudoku_BoardDim; val++)
@@ -118,11 +126,11 @@ static void CheckCompletion(){
                 TestAreaNum(SudokuGame, GetAreaFromPos(i, SudokuBoardSize), val, SudokuBoardSize)
             )) return;
         }
-        
-        SetGameState(GS_MainMenu);
-        SetSudokuState(GS_UNSET);
-        FreeBoards();
     }
+
+    SetGameState(GS_MainMenu);
+    SetSudokuState(GS_UNSET);
+    FreeBoards();
     
 }
 

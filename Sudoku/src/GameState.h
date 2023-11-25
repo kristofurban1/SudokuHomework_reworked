@@ -12,14 +12,12 @@ static int current_SudokuState;
 extern enum GameStates{
     GS_TitleScreen = 0, 
     GS_MainMenu = 1,
-    GS_LeaderBoard = 2,
-    GS_SudokuState = 3,
+    GS_SudokuState = 2
 } GameStates;
 
 extern enum SudokuState{
     GS_Sudoku = 0,
     GS_SudokuEndScreen = 1,
-    GS_SudokuConfirmCheat = 2,
     GS_UNSET = 3
 } SudokuState;
 

@@ -25,6 +25,7 @@ extern bool HighlightEnabled;
 extern int GameAvailableHelp;
 extern bool AutoHelp;
 
+extern int GetSudokuTimerStart();
 extern int GetBoardTotalSize();
 extern int GetBoardDimension();
 extern int GetBoardSize();
@@ -32,7 +33,7 @@ extern int *GetBoard();
 extern int *GetHighlightMap();
 
 extern void FreeBoards();
-extern void GenerateBoard(int boardsize);
+extern void GenerateBoard(int boardsize, uint64_t timerStart);
 
 extern void SetActive(int x, int y);
 extern void ClearSelection();

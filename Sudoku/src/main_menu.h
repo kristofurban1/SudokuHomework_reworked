@@ -18,8 +18,8 @@
 
 #define TITLE_TEXT "SUDOKU"
 
-extern void MM_SetDefaultValues(int size, int diff, int cheatlvl);
-extern void MM_GetDefaultValues(int *size, int *diff, int *cheatlvl);
+extern void MM_SetValues(int size, int diff, int cheatlvl);
+extern void MM_GetValues(int *size, int *diff, int *cheatlvl);
 
 #define MIN_SUDOKUSIZE 2
 #define MAX_SUDOKUSIZE 4
@@ -28,6 +28,8 @@ extern int selectedSudokuSize;
 extern int selectedDifficulty;
 extern bool selectedHighlight;
 extern int selectedCheatLevel;
+
+extern void MainMenu_SaveData();
 
 static void RenderTitle();
 static void RenderSudokuSizeSelector();

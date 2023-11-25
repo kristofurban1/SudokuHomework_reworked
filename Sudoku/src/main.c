@@ -26,7 +26,7 @@ extern int main(int argc, char *argv[]) {
     if (sd->u16CheatLevel < 0 || sd->u16CheatLevel > 7 ) sd->u16CheatLevel = 0;
     if (sd->u16Difficulty < 0 || sd->u16Difficulty > 3 ) sd->u16Difficulty = 0;
     if (sd->BoardSize < MIN_SUDOKUSIZE || sd->BoardSize > MAX_SUDOKUSIZE ) sd->BoardSize = 3;
-    MM_SetDefaultValues(sd->BoardSize, sd->u16Difficulty, sd->u16CheatLevel);
+    MM_SetValues(sd->BoardSize, sd->u16Difficulty, sd->u16CheatLevel);
     MainWindowWidth = sd->WindowWidth;
     MainWindowHeight = sd->WindowHeight;
     SDL_SetWindowSize(MainWindow, sd->WindowWidth, sd->WindowHeight);
@@ -53,6 +53,7 @@ extern int main(int argc, char *argv[]) {
         while(SDL_PollEvent(&event)){
             switch(event.type){
                 case SDL_QUIT:
+                MainMenu_SaveData();
                     FreeBoards();
                     running = false;
                     break;
@@ -121,10 +122,7 @@ extern int main(int argc, char *argv[]) {
                         SudokuInterface_MainLoop(cursorClick, keypress);
                         break;
                     case GS_SudokuEndScreen:
-                        break;
-                    case GS_SudokuConfirmCheat:
-                        break;
-                    
+                        break;                    
                     default:
                         SetErrorMessage("Unknown gamestate_sudoku"); SetErrorIndentfyer("main: SudokuState control");
                         RAISE_ERROR();

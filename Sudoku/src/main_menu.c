@@ -7,18 +7,29 @@ int selectedCheatLevel = 0;
 
 SDL_Point cursorClickPos;
 
-void MM_SetDefaultValues(int size, int diff, int cheatlvl){
+void MM_SetValues(int size, int diff, int cheatlvl){
     selectedSudokuSize = size;
     selectedDifficulty = diff;
     selectedHighlight  = cheatlvl & 1;
     selectedCheatLevel = (uint8_t)cheatlvl >> 1;
 }
 
-void MM_GetDefaultValues(int *size, int *diff, int *cheatlvl){
+void MM_GetValues(int *size, int *diff, int *cheatlvl){
     *size = selectedSudokuSize;
     *diff = selectedDifficulty;
 
     *cheatlvl = (uint8_t)selectedHighlight | ((uint8_t)selectedDifficulty << 1);
+}
+
+extern void MainMenu_SaveData(){
+    struct SaveData *sd = malloc(sizeof(struct SaveData)); malloc_verify(sd);
+    sd->WindowWidth = MainWindowWidth;
+    sd->WindowHeight = MainWindowHeight;
+    sd->BoardSize = selectedSudokuSize;
+    sd->u16Difficulty = selectedDifficulty;
+    sd->u16CheatLevel = (uint8_t)selectedHighlight | ((uint8_t)selectedDifficulty << 1);
+    WriteSaveData(sd);
+    free(sd);
 }
 
 static void RenderTitle(){
@@ -338,6 +349,7 @@ static void RenderStartButton(){
         SetGameState(GS_SudokuState);
         SetSudokuState(GS_Sudoku);
         GenerateSudoku(selectedSudokuSize, selectedDifficulty, selectedHighlight, selectedCheatLevel);
+        MainMenu_SaveData();
     }
 }
 
@@ -364,16 +376,6 @@ static void RenderExitButton(){
 
     if (SDL_PointInRect(&cursorClickPos, &bg_rect)){
         printf("MainMenu: ExitButtonClick\n");
-        struct SaveData *sd = malloc(sizeof(struct SaveData)); malloc_verify(sd);
-        sd->WindowWidth = MainWindowWidth;
-        sd->WindowHeight = MainWindowHeight;
-        sd->BoardSize = selectedSudokuSize;
-        sd->u16Difficulty = selectedDifficulty;
-        sd->u16CheatLevel = (uint8_t)selectedHighlight | ((uint8_t)selectedDifficulty << 1);
-
-        WriteSaveData(sd);
-        free(sd);
-        
         SDL_Event e;
         e.type = SDL_QUIT;
         SDL_PushEvent(&e);

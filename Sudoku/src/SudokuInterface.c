@@ -25,7 +25,7 @@ void GenerateSudoku(int size, int diff, bool hl, int cheat){
         break;
     }
     
-    GenerateBoard(size);
+    GenerateBoard(size, SDL_GetTicks64());
 
 }
 
@@ -179,6 +179,40 @@ extern void RenderCell(int x, int y, int val, int visual){
     };
 }
 
+static void RenderTimer(){
+    uint64_t timerStart = GetSudokuTimerStart();
+    uint64_t timerNow = SDL_GetTicks64();
+    uint64_t enalpsed = timerNow - timerStart;
+
+    int totalSeconds = enalpsed / 1000;
+    int totalMinutes = totalSeconds / 60;
+
+    int seconds = totalSeconds % 60;
+    int minutes = totalMinutes % 60;
+    int hours = totalMinutes / 60;
+
+    char secs[3];
+    char mins[3];
+    char  hrs[3];
+    sprintf(secs, "%d%d", seconds / 10, seconds % 10);
+    sprintf(mins, "%d%d", minutes / 10, minutes % 10);
+    sprintf( hrs, "%d%d", hours / 10, hours % 10);
+
+    char timer[15];
+    sprintf(timer, "%s:%s:%s", hrs, mins, secs);
+
+    int render_w, render_h;
+    SDL_Texture *rendered_text = RenderFont(MainRenderer, GetFont(), timer, C_White, &render_w, &render_h);
+    SDL_Rect rect;
+    rect.h = MainWindowHeight * 0.05;
+    rect.w = (int)(((float)rect.h / render_h) * render_w);
+    rect.x = 0;
+    rect.y = 0;
+
+    SDL_RenderCopy(MainRenderer, rendered_text, NULL, &rect);
+    SDL_DestroyTexture(rendered_text);
+}
+
 void SudokuInterface_MainLoop(SDL_Point cursorclick, SDL_Scancode _keypress){
     cursorClick = cursorclick;
     keypress = _keypress;
@@ -220,6 +254,8 @@ void SudokuInterface_MainLoop(SDL_Point cursorclick, SDL_Scancode _keypress){
     }
     
     RenderBackButton();
+
+    RenderTimer();
 
     if (keypress == SDL_SCANCODE_UNKNOWN) return;
 
