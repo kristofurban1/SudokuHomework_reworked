@@ -105,13 +105,12 @@ void GenerateBoard(int boardsize){
 }
 
 static void CheckCompletion(){
-    for (int i = 0; i < GetBoardTotalSize(); i++)
+    /*for (int i = 0; i < GetBoardTotalSize(); i++)
         if (SudokuGame[i] == 0) return;
-    
-
+    */
     for (int i = 0; i < Sudoku_BoardDim; i++)
     {
-        for (int val = 0; val < Sudoku_BoardDim; val++)
+        for (int val = 1; val <= Sudoku_BoardDim; val++)
         {
             if (!(
                 TestRowNum(SudokuGame, i, val, SudokuBoardSize) &&
@@ -128,10 +127,11 @@ static void CheckCompletion(){
 }
 
 void ResetHighlightMap() { memset(HighlightMap, 0, sizeof(int) * GetBoardTotalSize()); };
-0
+
 static void SetActiveI(int activeI){
     
-    ResetHighlightMap();
+    if (SudokuGame[activeI] != 0)
+        ResetHighlightMap();
 
     SelectedByUser = activeI;
 
@@ -155,7 +155,10 @@ void ClearSelection(){
 }
 
 void ShowErrors(){
-
+    for (int i = 0; i < GetBoardTotalSize(); i++)
+    {
+        if (SudokuGame[i] != SudokuSolution[i]) HighlightMap[i] = 3; // Error
+    }
 }
 
 void WriteToCell(int number){
@@ -169,7 +172,7 @@ void WriteToCell(int number){
 
     SetActiveI(SelectedByUser);
 
-    CheckCompletion();
-
     if(AutoHelp) ShowErrors();
+    
+    CheckCompletion();
 }

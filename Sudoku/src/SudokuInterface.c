@@ -24,7 +24,7 @@ void GenerateSudoku(int size, int diff, bool hl, int cheat){
         GameAvailableHelp = 0;
         break;
     }
-    render_temp = &SudokuInterface_MainLoop;
+    
     GenerateBoard(size);
 
 }
@@ -165,6 +165,11 @@ extern void RenderCell(int x, int y, int val, int visual){
         rect.h = cellSize;
         rect.x = posx + start.x;
         rect.y = posy + start.y;
+
+        if (visual == 1){
+            SetRenderDrawSDLColor(MainRenderer, C_DarkGreen);
+            SDL_RenderFillRect(MainRenderer, &rect);
+        }
     }
     
 
