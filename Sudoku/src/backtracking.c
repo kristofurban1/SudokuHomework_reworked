@@ -58,11 +58,10 @@ void SolveGame(int *board, int sudokuSize){
         }
         
         
-        
     }
     free(startValues);
 }
-
+/*
 int *tmp;
 
 bool Verify_Solution(int *board_org, int size){
@@ -124,3 +123,4 @@ BT_VFS_BREAK:
     
     return result;
 }
+*/

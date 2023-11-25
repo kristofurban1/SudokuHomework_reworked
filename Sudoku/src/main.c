@@ -53,6 +53,7 @@ extern int main(int argc, char *argv[]) {
         while(SDL_PollEvent(&event)){
             switch(event.type){
                 case SDL_QUIT:
+                    FreeBoards();
                     running = false;
                     break;
                 case SDL_WINDOWEVENT:

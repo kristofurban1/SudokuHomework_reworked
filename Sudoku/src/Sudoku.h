@@ -6,6 +6,7 @@
 #include "ErrorHandler.h"
 #include "sudoku_tester.h"
 #include "backtracking.h"
+#include "GameState.h"
 
 #define DifficultyEasy      0.8
 #define DifficultyMedium    0.7
@@ -28,14 +29,16 @@ extern int GetBoardTotalSize();
 extern int GetBoardDimension();
 extern int GetBoardSize();
 extern int *GetBoard();
+extern int *GetHighlightMap();
 
 extern void FreeBoards();
 extern void GenerateBoard(int boardsize);
-extern void SolveGame();
+
+extern void SetActive(int x, int y);
+extern void ClearSelection();
+extern void WriteToCell(int number);
 
 extern void ResetHighlightMap();
-extern void ShowSelectedByUser();
-extern void HighlightNumber(int number);
 extern void ShowErrors();
 
 

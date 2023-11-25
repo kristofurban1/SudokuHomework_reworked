@@ -58,6 +58,11 @@ extern void RenderHelpButton(){
 
     if (SDL_PointInRect(&cursorClick, &bg_rect)){
         printf("SudokuInterface: Help\n");
+        if (GameAvailableHelp != 0){
+            ShowErrors();
+
+            if (GameAvailableHelp > 0) GameAvailableHelp--;
+        }
     }
 }
 
@@ -114,7 +119,6 @@ extern void RenderGrid(){
     
 }
 extern void RenderCell(int x, int y, int val, int visual){
-    if (val == 0) return;
     int boardSize = end.x - start.x;
     float cellSize  = (float)boardSize / GetBoardDimension();
 
@@ -127,28 +131,47 @@ extern void RenderCell(int x, int y, int val, int visual){
     case 0:
         color = C_White;    // Default
         break;
-    case 1:
+    case 1: 
+        color = C_Green;      // Selected
+        break;
+    case 2:
         color = C_Yellow;   // Highlight
         break;
-    case 2: 
+    case 3: 
         color = C_Red;      // Error
         break;
     default:
         color = C_White; // Unknown
         break;
     }
-    char cellVal[10];
-    sprintf(cellVal, "%d" ,val);
-    int render_w, render_h;
-    SDL_Texture *rendered_text = RenderFont(MainRenderer, GetFont(), cellVal, color, &render_w, &render_h);
+    
     SDL_Rect rect;
-    rect.h = (int)(cellSize * 0.8 + 0.5) ;
-    rect.w = (int)(cellSize * 0.8 + 0.5);
-    rect.x = posx + start.x + (int)(cellSize * 0.1 + 0.5);;
-    rect.y = posy + start.y + (int)(cellSize * 0.2 + 0.5);;
+    if (val != 0){
+        char cellVal[10];
+        sprintf(cellVal, "%d" ,val);
+        int render_w, render_h;
+        SDL_Texture *rendered_text = RenderFont(MainRenderer, GetFont(), cellVal, color, &render_w, &render_h);
+        
+        rect.h = (int)(cellSize * 0.8 + 0.5) ;
+        rect.w = (int)(cellSize * 0.8 + 0.5);
+        rect.x = posx + start.x + (int)(cellSize * 0.1 + 0.5);
+        rect.y = posy + start.y + (int)(cellSize * 0.2 + 0.5);
 
-    SDL_RenderCopy(MainRenderer, rendered_text, NULL, &rect);
-    SDL_DestroyTexture(rendered_text);
+        SDL_RenderCopy(MainRenderer, rendered_text, NULL, &rect);
+        SDL_DestroyTexture(rendered_text);
+    }
+    else{
+        rect.w = cellSize;
+        rect.h = cellSize;
+        rect.x = posx + start.x;
+        rect.y = posy + start.y;
+    }
+    
+
+    if (SDL_PointInRect(&cursorClick, &rect)){
+        printf("Clicked cell: %d:%d\n", x, y);
+        SetActive(x, y);
+    };
 }
 
 void SudokuInterface_MainLoop(SDL_Point cursorclick, SDL_Scancode _keypress){
@@ -178,17 +201,27 @@ void SudokuInterface_MainLoop(SDL_Point cursorclick, SDL_Scancode _keypress){
     SDL_RenderFillRect(MainRenderer, &bg);
 
     RenderHelpButton();
-    RenderBackButton();
     
     RenderGrid();
 
     int *board = GetBoard();
+    int *hlmap = GetHighlightMap();
     for (int i = 0; i < GetBoardTotalSize(); i++)
     {
         int x = i % GetBoardDimension();
         int y = i / GetBoardDimension();
 
-        RenderCell(x, y, board[i], 0);
+        RenderCell(x, y, board[i], hlmap[i]);
     }
     
+    RenderBackButton();
+
+    if (keypress == SDL_SCANCODE_UNKNOWN) return;
+
+    if (keypress == SDL_SCANCODE_ESCAPE) ClearSelection();
+
+    if      (!(keypress < 30 || keypress > 38)) WriteToCell(keypress - 29);
+    else if (!(keypress < 89 || keypress > 97)) WriteToCell(keypress - 88);
+    else if (keypress == 53 || keypress == 98)  WriteToCell(0);
+
 }
