@@ -25,7 +25,7 @@ static bool GuessNextValue(int *board, int *startValues, int index, int dim){
     return true;
 }
 
-void SolveGame(int *board, int sudokuSize){
+extern void SolveGame(int *board, int sudokuSize){
     int sudokuDim = sudokuSize * sudokuSize; 
     int targetMax = sudokuDim;
     int index = 0;

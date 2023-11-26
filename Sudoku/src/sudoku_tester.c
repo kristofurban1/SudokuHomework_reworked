@@ -28,11 +28,6 @@ extern bool TestRowNum(int *board, int rowIndex, int num, int size){
     }
     return true;
 }
-extern bool TestRow(int *board, int rowIndex, int size){
-    for (size_t i = 1; i <= size * size; i++)
-        if (!TestRowNum(board, rowIndex, i, size)) return false;
-    return true;
-}
 
 extern bool TestColNum(int *board, int colIndex, int num, int size){
     int dim = size * size;
@@ -45,11 +40,6 @@ extern bool TestColNum(int *board, int colIndex, int num, int size){
             found = true;
         }
     }
-    return true;
-}
-extern bool TestCol(int *board, int colIndex, int size){
-    for (size_t i = 1; i <= size * size; i++)
-        if (!TestColNum(board, colIndex, i, size)) return false;
     return true;
 }
 
@@ -70,12 +60,6 @@ extern bool TestAreaNum(int *board, int areaIndex, int num, int size){
             if (found) return false;
             found = true;
         }
-    }
-    return true;
-}
-extern bool TestArea(int *board, int areaIndex, int size){
-    for (int i = 0; i < size * size; i ++){
-        if (!TestAreaNum(board, areaIndex, i, size)) return false;
     }
     return true;
 }

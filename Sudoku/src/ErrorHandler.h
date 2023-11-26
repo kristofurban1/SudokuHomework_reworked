@@ -11,9 +11,6 @@
 
 #define MSG_MALLOC_ERROR "Error: Malloc failed!"
 
-static char *error_message;
-static char *error_identifyer;
-
 /*
     @brief Sets the error identifyer variable.
 */

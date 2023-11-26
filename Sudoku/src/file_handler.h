@@ -30,10 +30,6 @@
 #define ASSET_FONT          "font.ttf"
 #define ASSET_ICON          "icon.png"
 
-static bool FileExists(const char *filename);
-
-static char *AppendToBasePath(char *endOfPath, char *basePath);
-
 extern void FileHandler_Init();
 
 extern struct SaveData *GetDefaultSaveData();
@@ -42,7 +38,7 @@ extern struct SaveData *ReadSaveData();
 
 extern void WriteSaveData(struct SaveData *data);
 
-extern struct Leaderboard_Entry *ReadLeaderboard(int *entryCount);
+extern struct Leaderboard_Entry *ReadLeaderboard(int *entryCount_out);
 
 extern void WriteLeaderboard(struct Leaderboard_Entry *entries, int entryCount);
 

@@ -1,35 +1,35 @@
 #include "main_menu.h"
 
-int selectedSudokuSize = 3;
-int selectedDifficulty = 0;
-bool selectedHighlight = false;
-int selectedCheatLevel = 0;
+static int selectedSudokuSize = 3;
+static int selectedDifficulty = 0;
+static bool selectedHighlight = false;
+static int selectedCheatLevel = 0;
 
-SDL_Point cursorClickPos;
+static SDL_Point cursorClickPos;
 
-void MM_SetValues(int size, int diff, int cheatlvl){
+extern void MM_SetValues(int size, int diff, int cheatlvl){
     selectedSudokuSize = size;
     selectedDifficulty = diff;
     selectedHighlight  = cheatlvl & 1;
-    selectedCheatLevel = (uint8_t)cheatlvl >> 1;
+    selectedCheatLevel = cheatlvl >> 1;
 }
 
-void MM_GetValues(int *size, int *diff, int *cheatlvl){
+extern void MM_GetValues(int *size, int *diff, int *cheatlvl){
     *size = selectedSudokuSize;
     *diff = selectedDifficulty;
 
-    *cheatlvl = (uint8_t)selectedHighlight | ((uint8_t)selectedDifficulty << 1);
+    *cheatlvl = (selectedHighlight & 1) | (selectedCheatLevel << 1);
 }
 
 extern void MainMenu_SaveData(){
-    struct SaveData *sd = malloc(sizeof(struct SaveData)); malloc_verify(sd);
-    sd->WindowWidth = MainWindowWidth;
-    sd->WindowHeight = MainWindowHeight;
-    sd->BoardSize = selectedSudokuSize;
-    sd->u16Difficulty = selectedDifficulty;
-    sd->u16CheatLevel = (uint8_t)selectedHighlight | ((uint8_t)selectedDifficulty << 1);
-    WriteSaveData(sd);
-    free(sd);
+    struct SaveData sd;
+    sd.WindowWidth = MainWindowWidth;
+    sd.WindowHeight = MainWindowHeight;
+    int d, c;
+    MM_GetValues(&sd.BoardSize, &d, &c);
+    sd.u16Difficulty = d;
+    sd.u16CheatLevel = c;
+    WriteSaveData(&sd);
 }
 
 static void RenderTitle(){
@@ -383,7 +383,7 @@ static void RenderExitButton(){
 }
 
 
-void MainMenu_MainLoop(SDL_Point cursorPos){
+extern void MainMenu_MainLoop(SDL_Point cursorPos){
     cursorClickPos = cursorPos;
 
     SetRenderDrawSDLColor(MainRenderer, C_Black);

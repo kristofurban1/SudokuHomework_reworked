@@ -13,37 +13,20 @@
 #define DifficultyHard      0.6
 #define DifficultyExtreme   0.5
 
-extern int SudokuBoardSize;
-extern int Sudoku_BoardDim;
-extern int *SudokuGame;
-extern int *SudokuSolution;
-extern int *HighlightMap; // 0: normal; 1: Selected by user; 2: Highlighted; 4: Error
-extern int SelectedByUser;
-
-extern int difficulty;
-extern bool HighlightEnabled;
-extern int GameAvailableHelp;
-extern bool AutoHelp;
-
-extern int GetSudokuTimerStart();
+extern uint64_t GetSudokuTimerStart();
 extern int GetBoardTotalSize();
 extern int GetBoardDimension();
 extern int GetBoardSize();
 extern int *GetBoard();
 extern int *GetHighlightMap();
 
+extern void SetDifficulty(int difficulty);
+
 extern void FreeBoards();
-extern void GenerateBoard(int boardsize, uint64_t timerStart);
+extern void GenerateBoard(int boardsize, uint64_t timerStart, void (*SudokuCompletedFnc)());
 
 extern void SetActive(int x, int y);
 extern void ClearSelection();
 extern void WriteToCell(int number);
-
-extern void ResetHighlightMap();
-extern void ShowErrors();
-
-
-
-
 
 #endif

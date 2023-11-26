@@ -2,7 +2,7 @@
 
 char *BasePath;
 
-bool FileExists(const char *filename){
+static bool FileExists(const char *filename){
     FILE *fp = fopen(filename, "r");
     if (fp != NULL){
         fclose(fp);
@@ -11,7 +11,7 @@ bool FileExists(const char *filename){
     return false;
 }
 
-char *AppendToBasePath(char *endOfPath, char *basePath){
+static char *AppendToBasePath(char *endOfPath, char *basePath){
     int eop_len  = strlen(endOfPath);
     int base_len = strlen(basePath);
 
@@ -22,7 +22,7 @@ char *AppendToBasePath(char *endOfPath, char *basePath){
     
     return final;
 }
-struct SaveData *GetDefaultSaveData(){
+extern struct SaveData *GetDefaultSaveData(){
     struct SaveData *def = malloc(sizeof(SaveData));
         SetErrorIndentfyer("file_handler: GetDefaultSaveData"); malloc_verify(def);
 
@@ -35,7 +35,7 @@ struct SaveData *GetDefaultSaveData(){
     return def;
 }
 
-void WriteSaveData(struct SaveData *data){
+extern void WriteSaveData(struct SaveData *data){
     char *pszSaveDataPath = AppendToBasePath(PATH_SAVEDATA, BasePath);
     FILE *fp = fopen(pszSaveDataPath, "w");
     free(pszSaveDataPath);
@@ -43,7 +43,7 @@ void WriteSaveData(struct SaveData *data){
     fclose(fp);
 }
 
-struct SaveData *ReadSaveData(){
+extern struct SaveData *ReadSaveData(){
     char *pszSaveDataPath = AppendToBasePath(PATH_SAVEDATA, BasePath);
     FILE *fp = fopen(pszSaveDataPath, "r");
     free(pszSaveDataPath);
@@ -67,16 +67,17 @@ struct SaveData *ReadSaveData(){
     return data;
 }
 
-void WriteLeaderboard(struct Leaderboard_Entry *entries, int entryCount){
+extern void WriteLeaderboard(struct Leaderboard_Entry *entries, int entryCount){
     char *pszLeaderboardPath = AppendToBasePath(PATH_LEADERBOARD, BasePath);
     FILE *fp = fopen(pszLeaderboardPath, "w");
     free(pszLeaderboardPath);
+    printf("ec: %d\n", entryCount);
     fwrite(&entryCount, sizeof(int), 1, fp);
-    fwrite(entries, sizeof(Leaderboard_Entry), entryCount, fp);
+    if (entryCount > 0) fwrite(entries, sizeof(Leaderboard_Entry), entryCount, fp);
     fclose(fp);
 }
 
-struct Leaderboard_Entry *ReadLeaderboard(int *entryCount_out){
+extern struct Leaderboard_Entry *ReadLeaderboard(int *entryCount_out){
     char *pszLeaderboardPath = AppendToBasePath(PATH_LEADERBOARD, BasePath);
     FILE *fp = fopen(pszLeaderboardPath, "r");
     free(pszLeaderboardPath);
@@ -84,17 +85,19 @@ struct Leaderboard_Entry *ReadLeaderboard(int *entryCount_out){
     int entryCount;
     fread(&entryCount, sizeof(int), 1, fp);
 
-    struct Leaderboard_Entry *entries;
-        entries = malloc(sizeof(Leaderboard_Entry) * entryCount);
-        SetErrorIndentfyer("file_handler: ReadLeaderboard"); malloc_verify(entries);
-    
-    fread(entries, sizeof(Leaderboard_Entry), entryCount, fp);
+    struct Leaderboard_Entry *entries = NULL;
+        if (entryCount > 0){
+            entries = malloc(sizeof(Leaderboard_Entry) * entryCount);
+            SetErrorIndentfyer("file_handler: ReadLeaderboard"); malloc_verify(entries);
+            fread(entries, sizeof(Leaderboard_Entry), entryCount, fp);
+        }
+
     fclose(fp);
-    entryCount_out = &entryCount;
+    *entryCount_out = entryCount;
     return entries;
 }
 
-void FileHandler_Init(){
+extern void FileHandler_Init(){
     BasePath = SDL_GetBasePath();
 
     char *dataFolder = AppendToBasePath(DIR_DATA, BasePath);
@@ -116,7 +119,7 @@ void FileHandler_Init(){
     free(pszLeaderboardPath);
 }
 
-char *GetAsset(char* assetName){
+extern char *GetAsset(char* assetName){
     char *pszAssetFolder = AppendToBasePath(DIR_ASSETS, BasePath);
     char *pszAssetPath = AppendToBasePath(assetName, pszAssetFolder);
     free(pszAssetFolder);

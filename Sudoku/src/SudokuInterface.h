@@ -28,4 +28,6 @@ extern void RenderGrid();
 extern void RenderCell(int x, int y, int val, int visual);
 extern void SudokuInterface_MainLoop(SDL_Point cursorClick, SDL_Scancode keypress);
 
+extern void SudokuGameCompleted();
+
 #endif

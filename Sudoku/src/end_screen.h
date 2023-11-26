@@ -11,8 +11,8 @@
 #include "FontManager.h"
 #include "GameState.h"
 #include "ColorPalette.h"
-
-#include "Sudoku.h"
+#include "SudokuInterface.h"
+#include "leaderboard_parser.h"
 
 
 extern void EndScreen_MainLoop(SDL_Point cursorClick, SDL_Scancode keypress);

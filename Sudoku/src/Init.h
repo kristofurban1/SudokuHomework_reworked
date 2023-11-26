@@ -18,19 +18,6 @@
 extern void INITIALIZE_ALL();
 
 /*
-    @brief Initalizes the SDL module.
-    @attention Runs only once. Is included in INITIALIZE_ALL.
-    @param flags SDL Subsystems to initialize.
-*/
-extern void Init_SDL(Uint32 flags);
-
-
-extern void Init_TTF();
-
-
-extern void Init_IMG();
-
-/*
     @brief Creates a new window.
 
     @param window Pointer to created window.

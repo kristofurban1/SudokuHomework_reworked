@@ -3,29 +3,40 @@
 static SDL_Point cursorClick;
 static SDL_Scancode keypress;
 
-void GenerateSudoku(int size, int diff, bool hl, int cheat){
-    difficulty = diff;
-    HighlightEnabled = hl;
+static int size; 
+static int diff;
+static bool hl;
+static int cheat;
+
+void GenerateSudoku(int _size, int _diff, bool _hl, int _cheat){
+
+    size  = _size; 
+    diff  = _diff;
+    hl    = _hl;
+    cheat = _cheat;
+
+    SetDifficulty(diff);
+    SetHighlightEnalbled(hl);
     switch (cheat)
     {
     case 0:;
-        GameAvailableHelp = 0;
+        SetAvailableHelp(0);
         break;
     case 1:;
-        GameAvailableHelp = 3;
+        SetAvailableHelp(3);
         break;
     case 2:;
-        GameAvailableHelp = -1;
+        SetAvailableHelp(-1);
         break;
     case 3:;
-        AutoHelp = true;
+        SetAutoHelp(true);
         break;
     default:;
-        GameAvailableHelp = 0;
+        SetAvailableHelp(0);
         break;
     }
     
-    GenerateBoard(size, SDL_GetTicks64());
+    GenerateBoard(size, SDL_GetTicks64(), &SudokuGameCompleted);
 
 }
 
@@ -265,4 +276,32 @@ void SudokuInterface_MainLoop(SDL_Point cursorclick, SDL_Scancode _keypress){
     else if (!(keypress < 89 || keypress > 97)) WriteToCell(keypress - 88);
     else if (keypress == 53 || keypress == 98)  WriteToCell(0);
 
+}
+
+extern void SudokuGameCompleted(){
+    printf("SudokuInterface: Game completed callback.\n");
+    SetGameState(GS_SudokuState);
+    SetSudokuState(GS_SudokuEndScreen);
+    FreeBoards();
+
+    uint64_t timeEnlapsed = SDL_GetTicks64() - GetSudokuTimerStart();
+
+    int entryCount;
+    struct Leaderboard_Entry *entires = ReadLeaderboard(&entryCount);
+
+    // Add 1 extra spot;
+    if (entryCount == 0) 
+        entires = malloc(sizeof(struct Leaderboard_Entry)); 
+    else 
+        entires = realloc(entires, sizeof(struct Leaderboard_Entry) * (entryCount+1)); 
+    malloc_verify(entires);
+
+    entires[entryCount].BoardSize = size;
+    entires[entryCount].u16CheatLevel = (cheat << 1 ) | (hl & 1);
+    entires[entryCount].u16Difficulty = diff;
+    entires[entryCount].Seconds = timeEnlapsed / 1000;
+    entryCount++;
+    
+    WriteLeaderboard(entires, entryCount);
+    free(entires);
 }

@@ -9,8 +9,6 @@
 #include <SDL2/SDL.h>
 #include "WINDOW_PARAMETERS.h"
 
-extern int *tmp;
-
 extern void SolveGame(int *board, int sudokuDim);
 
 #endif

@@ -6,9 +6,6 @@
 
 #define GS_TitleScreen_Durration 2000
 
-static int current_GameState;
-static int current_SudokuState;
-
 extern enum GameStates{
     GS_TitleScreen = 0, 
     GS_MainMenu = 1,

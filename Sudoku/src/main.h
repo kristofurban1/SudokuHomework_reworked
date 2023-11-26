@@ -20,6 +20,7 @@
 #include "title_screen.h"
 #include "main_menu.h"
 #include "SudokuInterface.h"
+#include "end_screen.h"
 
 /*
     Program Main entry point.

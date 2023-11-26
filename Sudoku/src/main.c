@@ -2,10 +2,10 @@
 
 #define SHOW_SCREEN_DIV false
 
-int MainWindowWidth  = Default_WIDTH;
-int MainWindowHeight = Default_HEIGHT;
-SDL_Window *MainWindow      = NULL;
-SDL_Renderer *MainRenderer  = NULL;
+extern int MainWindowWidth  = Default_WIDTH;
+extern int MainWindowHeight = Default_HEIGHT;
+extern SDL_Window *MainWindow      = NULL;
+extern SDL_Renderer *MainRenderer  = NULL;
 
 extern int main(int argc, char *argv[]) {
     srand(time(NULL));
@@ -27,8 +27,8 @@ extern int main(int argc, char *argv[]) {
     if (sd->u16Difficulty < 0 || sd->u16Difficulty > 3 ) sd->u16Difficulty = 0;
     if (sd->BoardSize < MIN_SUDOKUSIZE || sd->BoardSize > MAX_SUDOKUSIZE ) sd->BoardSize = 3;
     MM_SetValues(sd->BoardSize, sd->u16Difficulty, sd->u16CheatLevel);
-    MainWindowWidth = sd->WindowWidth;
-    MainWindowHeight = sd->WindowHeight;
+    MainWindowWidth  = (sd->WindowWidth < Minimum_Width || sd->WindowWidth > Maximum_Width ? Default_WIDTH : sd->WindowWidth);
+    MainWindowHeight = (sd->WindowHeight < Minimum_Heigth ? Default_HEIGHT : sd->WindowHeight);
     SDL_SetWindowSize(MainWindow, sd->WindowWidth, sd->WindowHeight);
     free(sd);
 
@@ -122,6 +122,7 @@ extern int main(int argc, char *argv[]) {
                         SudokuInterface_MainLoop(cursorClick, keypress);
                         break;
                     case GS_SudokuEndScreen:
+                        EndScreen_MainLoop(cursorClick, keypress);
                         break;                    
                     default:
                         SetErrorMessage("Unknown gamestate_sudoku"); SetErrorIndentfyer("main: SudokuState control");

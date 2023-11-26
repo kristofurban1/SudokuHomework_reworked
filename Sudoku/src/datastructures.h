@@ -26,7 +26,7 @@ extern struct Leaderboard_Entry {
     int         BoardSize;
     uint_16     u16Difficulty;
     uint_16     u16CheatLevel;
-    long int    Seconds;
+    int    Seconds;
 } Leaderboard_Entry;
 
 

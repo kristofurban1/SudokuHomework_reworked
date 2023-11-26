@@ -1,40 +1,44 @@
 #include "Sudoku.h"
 
-int SudokuBoardSize = 0;
-int Sudoku_BoardDim = 0;
-int *SudokuGame = NULL;
-int *SudokuSolution = NULL;
-int *HighlightMap = NULL; // 0: normal; 1: Selected by user; 2: Highlighted; 4: Error
-int SelectedByUser = -1;
+static int SudokuBoardSize = 0;
+static int Sudoku_BoardDim = 0;
+static int *SudokuGame = NULL;
+static int *SudokuSolution = NULL;
+static int *HighlightMap = NULL; // 0: normal; 1: Selected by user; 2: Highlighted; 4: Error
+static int SelectedByUser = -1;
 
-int difficulty = 0;
-bool HighlightEnabled = false;
-int GameAvailableHelp = 0;
-bool AutoHelp = false;
+static int Difficulty = 0;
+static bool HighlightEnabled = false;
+static int GameAvailableHelp = 0;
+static bool AutoHelp = false;
 
-uint64_t SudokuTimerStart;
+static uint64_t SudokuTimerStart;
+static void (*CompletedCallback)();
 
-extern int GetSudokuTimerStart(){
+extern uint64_t GetSudokuTimerStart(){
     return SudokuTimerStart;
 }
-
-int GetBoardTotalSize(){
+extern int GetBoardTotalSize(){
     return Sudoku_BoardDim * Sudoku_BoardDim;
 }
-int GetBoardDimension(){
+extern int GetBoardDimension(){
     return Sudoku_BoardDim;
 }
-int GetBoardSize(){
+extern int GetBoardSize(){
     return SudokuBoardSize;
 }
-int *GetBoard(){
+extern int *GetBoard(){
     return SudokuGame;
 }
-int *GetHighlightMap(){
+extern int *GetHighlightMap(){
     return HighlightMap;
 }
 
-void FreeBoards(){
+extern void SetDifficulty(int difficulty){
+    Difficulty = difficulty;
+}
+
+extern void FreeBoards(){
     if (SudokuGame      != NULL)    free(SudokuGame);
     if (SudokuSolution  != NULL)    free(SudokuSolution);
     if (HighlightMap    != NULL)    free(HighlightMap);
@@ -42,7 +46,10 @@ void FreeBoards(){
 }
 
 
-void GenerateBoard(int boardsize, uint64_t timerStart){
+extern void GenerateBoard(int boardsize, uint64_t timerStart, void (*SudokuCompletedFnc)()){
+
+    CompletedCallback = SudokuCompletedFnc;
+
     SudokuBoardSize = boardsize;
     Sudoku_BoardDim = boardsize * boardsize;
 
@@ -67,7 +74,7 @@ void GenerateBoard(int boardsize, uint64_t timerStart){
     memcpy(SudokuGame, SudokuSolution, allocationSize);
 
     float diff_remainFilled;
-    switch (difficulty)
+    switch (Difficulty)
     {
     case 0:
         diff_remainFilled = DifficultyEasy;
@@ -128,18 +135,19 @@ static void CheckCompletion(){
         }
     }
 
-    SetGameState(GS_MainMenu);
-    SetSudokuState(GS_UNSET);
-    FreeBoards();
+    CompletedCallback();
     
 }
 
-void ResetHighlightMap() { memset(HighlightMap, 0, sizeof(int) * GetBoardTotalSize()); };
+static void ResetHighlightMap() { memset(HighlightMap, 0, sizeof(int) * GetBoardTotalSize()); };
 
 static void SetActiveI(int activeI){
     
     if (SudokuGame[activeI] != 0)
         ResetHighlightMap();
+    
+    if (SudokuGame[SelectedByUser] == 0)
+        HighlightMap[SelectedByUser] = 0;
 
     SelectedByUser = activeI;
 
@@ -152,25 +160,34 @@ static void SetActiveI(int activeI){
     HighlightMap[activeI] = 1; // Selected
 }
 
-void SetActive(int x, int y){
+extern void SetActive(int x, int y){
     int activeI = (y * Sudoku_BoardDim) + x;
     SetActiveI(activeI);
 }   
 
-void ClearSelection(){
+extern void ClearSelection(){
     SelectedByUser = -1;
     ResetHighlightMap();
 }
 
-void ShowErrors(){
+static void ShowErrors(){
     for (int i = 0; i < GetBoardTotalSize(); i++)
     {
         if (SudokuGame[i] != SudokuSolution[i]) HighlightMap[i] = 3; // Error
     }
 }
 
-void WriteToCell(int number){
-    if (SelectedByUser == -1) return;
+extern void WriteToCell(int number){
+    if (SelectedByUser == -1) {
+        ResetHighlightMap();
+        if (HighlightEnabled){
+            for (int i = 0; i < GetBoardTotalSize(); i++)
+            {
+                if (SudokuGame[i] == number) HighlightMap[i] = 2; // Highlighted
+            }
+        }
+        return;
+    }
     printf("Writing %d to %d\n", number, SelectedByUser);
 
     int current = SudokuGame[SelectedByUser];
