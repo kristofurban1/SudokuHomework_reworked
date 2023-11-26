@@ -54,7 +54,7 @@ extern struct SaveData *ReadSaveData(){
     for(bytes = 0; getc(fp) != EOF; ++bytes);
 
     if (bytes != sizeof(SaveData)) {
-        printf("%s corrupted. Loading defaults. (%d : %d)\n", PATH_SAVEDATA, bytes, sizeof(SaveData));
+        printf("%s corrupted. Loading defaults. (%d : %lld)\n", PATH_SAVEDATA, bytes, sizeof(SaveData));
         struct SaveData *def = GetDefaultSaveData();
         return def;
     }

@@ -14,12 +14,6 @@
 
 #include "Sudoku.h"
 
-static SDL_Point cursorClick;
-static SDL_Scancode keypress;
-
-static SDL_Point start;
-static SDL_Point end;
-
 extern void GenerateSudoku(int size, int diff, bool hl, int cheat);
 
 extern void RenderHelpButton();

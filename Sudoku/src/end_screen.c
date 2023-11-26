@@ -75,6 +75,59 @@ static void RenderLeaderboard(){
     lb_bg.h = (MainWindowHeight * 0.8) - (MainWindowHeight * 0.1);
     SDL_RenderFillRect(MainRenderer, &lb_bg);
     
+    char entryCount_text[30];
+    sprintf(entryCount_text, "Number of entries: %d", entryCount);
+    int render_w_ec, render_h_ec;
+    SDL_Texture *rendered_text_ec = RenderFont(MainRenderer, GetFont(), entryCount_text, C_White, &render_w_ec, &render_h_ec);
+    SDL_Rect rect_ec;
+    rect_ec.w = MainWindowWidth * 0.3;
+    rect_ec.h = (int)(((float)rect_ec.w / render_w_ec) * render_h_ec);;
+    rect_ec.x = (MainWindowWidth  * 0.55);
+    rect_ec.y = (MainWindowHeight * 0.3) - rect_ec.h;
+
+    SDL_RenderCopy(MainRenderer, rendered_text_ec, NULL, &rect_ec);
+    SDL_DestroyTexture(rendered_text_ec);
+    
+    char avg_text[30];
+
+    if (entryCount == 0){
+        sprintf(avg_text, "Avarage time: NaN");
+    }
+    else{
+        int secSum = 0;
+        for (int i = 0; i < entryCount; i++)
+            secSum += entries[i].Seconds;
+
+        int totalSeconds = secSum / entryCount;
+        int totalMinutes = totalSeconds / 60;
+
+        int seconds = totalSeconds % 60;
+        int minutes = totalMinutes % 60;
+        int hours = totalMinutes / 60;
+
+
+        char  secs[3];
+        char  mins[3];
+        char   hrs[3];
+        sprintf( secs, "%d%d", seconds / 10, seconds % 10);
+        sprintf( mins, "%d%d", minutes / 10, minutes % 10);
+        sprintf(  hrs, "%d%d", hours / 10, hours % 10);
+
+        sprintf(avg_text, "Avarage time: %s:%s:%s", hrs, mins, secs);
+    }
+
+
+    int render_w_avg, render_h_avg;
+    SDL_Texture *rendered_text_avg = RenderFont(MainRenderer, GetFont(), avg_text, C_White, &render_w_avg, &render_h_avg);
+    SDL_Rect rect_avg;
+    rect_avg.w = MainWindowWidth * 0.3;
+    rect_avg.h = (int)(((float)rect_avg.w / render_w_avg) * render_h_avg);;
+    rect_avg.x = (MainWindowWidth  * 0.55);
+    rect_avg.y = (MainWindowHeight * 0.6) - rect_avg.h;
+
+    SDL_RenderCopy(MainRenderer, rendered_text_avg, NULL, &rect_avg);
+    SDL_DestroyTexture(rendered_text_avg);
+
     if (entryCount == 0) {
 
         return;

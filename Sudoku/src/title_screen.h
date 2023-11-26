@@ -15,7 +15,6 @@
 #include <SDL2/SDL_ttf.h>
 
 #define TITLESCREEN_TEXT "SUDOKU"
-static int TitleScreen_timer; //ms
 
 extern void SetTitleScreenTimer(int ms);
 extern void TitleScreen_MainLoop(Uint64 deltatime);

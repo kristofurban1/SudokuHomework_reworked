@@ -27,7 +27,6 @@ static bool GuessNextValue(int *board, int *startValues, int index, int dim){
 
 extern void SolveGame(int *board, int sudokuSize){
     int sudokuDim = sudokuSize * sudokuSize; 
-    int targetMax = sudokuDim;
     int index = 0;
 
     // Soduku solution (aka board) is already initalized.
