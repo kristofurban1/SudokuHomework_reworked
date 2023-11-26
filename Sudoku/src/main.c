@@ -2,10 +2,10 @@
 
 #define SHOW_SCREEN_DIV false
 
-extern int MainWindowWidth  = Default_WIDTH;
-extern int MainWindowHeight = Default_HEIGHT;
-extern SDL_Window *MainWindow      = NULL;
-extern SDL_Renderer *MainRenderer  = NULL;
+int MainWindowWidth  = Default_WIDTH;
+int MainWindowHeight = Default_HEIGHT;
+SDL_Window *MainWindow      = NULL;
+SDL_Renderer *MainRenderer  = NULL;
 
 extern int main(int argc, char *argv[]) {
     srand(time(NULL));

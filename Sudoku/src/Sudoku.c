@@ -33,9 +33,22 @@ extern int *GetBoard(){
 extern int *GetHighlightMap(){
     return HighlightMap;
 }
+extern int GetAvailableHelp(){
+    return GameAvailableHelp;
+}
+
 
 extern void SetDifficulty(int difficulty){
     Difficulty = difficulty;
+}
+extern void SetHighlightEnalbled(int highlightEnabled){
+    HighlightEnabled = highlightEnabled;
+}
+extern void SetAvailableHelp(int helpCount){
+    GameAvailableHelp = helpCount;
+}
+extern void SetAutoHelp(bool autoHelp){
+    AutoHelp = autoHelp;
 }
 
 extern void FreeBoards(){
@@ -170,7 +183,7 @@ extern void ClearSelection(){
     ResetHighlightMap();
 }
 
-static void ShowErrors(){
+extern void ShowErrors(){
     for (int i = 0; i < GetBoardTotalSize(); i++)
     {
         if (SudokuGame[i] != SudokuSolution[i]) HighlightMap[i] = 3; // Error

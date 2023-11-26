@@ -19,8 +19,13 @@ extern int GetBoardDimension();
 extern int GetBoardSize();
 extern int *GetBoard();
 extern int *GetHighlightMap();
+extern int GetAvailableHelp();
 
 extern void SetDifficulty(int difficulty);
+extern void SetHighlightEnalbled(int highlightEnabled);
+extern void SetAvailableHelp(int helpCount);
+extern void SetAutoHelp(bool autoHelp);
+
 
 extern void FreeBoards();
 extern void GenerateBoard(int boardsize, uint64_t timerStart, void (*SudokuCompletedFnc)());
@@ -28,5 +33,6 @@ extern void GenerateBoard(int boardsize, uint64_t timerStart, void (*SudokuCompl
 extern void SetActive(int x, int y);
 extern void ClearSelection();
 extern void WriteToCell(int number);
+extern void ShowErrors();
 
 #endif

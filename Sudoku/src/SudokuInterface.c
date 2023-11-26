@@ -45,8 +45,8 @@ static SDL_Point end;
 
 extern void RenderHelpButton(){
     char text[10];
-    if (GameAvailableHelp < 0) sprintf(text, "Help");
-    else sprintf(text, "Help (%d)", GameAvailableHelp);
+    if (GetAvailableHelp() < 0) sprintf(text, "Help");
+    else sprintf(text, "Help (%d)", GetAvailableHelp());
 
     int render_w, render_h;
     SDL_Texture *rendered_text = RenderFont(MainRenderer, GetFont(), text, C_White, &render_w, &render_h);
@@ -69,10 +69,10 @@ extern void RenderHelpButton(){
 
     if (SDL_PointInRect(&cursorClick, &bg_rect)){
         printf("SudokuInterface: Help\n");
-        if (GameAvailableHelp != 0){
+        if (GetAvailableHelp() != 0){
             ShowErrors();
 
-            if (GameAvailableHelp > 0) GameAvailableHelp--;
+            if (GetAvailableHelp() > 0) SetAvailableHelp(GetAvailableHelp() - 1);
         }
     }
 }
