@@ -32,6 +32,16 @@ extern void MainMenu_SaveData(){
     WriteSaveData(&sd);
 }
 
+
+/*
+    Render_xxx
+        static functions that break down the mainloop, they do not take parameters and dont return anything.
+        @important Some that handle keypress or mouseclick will expect cursorClickPos to be set correctly.
+        @memory The textures rendered may take larger amounts of memory based on Window Size, 
+            homewer as soon as they are allocated they will be freed so they don't add up to anything substential.
+*/
+
+
 static void RenderTitle(){
     char *text = TITLE_TEXT;
     int render_w, render_h;

@@ -2,6 +2,9 @@
 
 static TTF_Font *__FONT__;
 
+/*
+    @brief Loads front using file_handler.
+*/
 static TTF_Font *LoadFont(int size){
     char *path = GetAsset(ASSET_FONT);
     TTF_Font *font = TTF_OpenFont(path, size);

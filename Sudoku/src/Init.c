@@ -23,11 +23,20 @@ extern void Create_Renderer(SDL_Window *target_window, SDL_Renderer **renderer, 
     SDL_ptr_verify(renderer);
 }
 
+
+/*
+    @brief Initalizes the TTF module.
+    @attention Runs only once. Is included in INITIALIZE_ALL.
+*/
 static void Init_TTF(){
     SetErrorIndentfyer("TTF Initialization.");
     SDL_verify(TTF_Init());
 }
 
+/*
+    @brief Initalizes the IMG module.
+    @attention Runs only once. Is included in INITIALIZE_ALL.
+*/
 static void Init_IMG(){
     SetErrorIndentfyer("IMG Initialization.");
     SDL_verify(IMG_Init(IMG_INIT_PNG));

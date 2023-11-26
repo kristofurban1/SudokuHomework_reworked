@@ -122,7 +122,7 @@ extern int main(int argc, char *argv[]) {
                         SudokuInterface_MainLoop(cursorClick, keypress);
                         break;
                     case GS_SudokuEndScreen:
-                        EndScreen_MainLoop(cursorClick, keypress);
+                        EndScreen_MainLoop(cursorClick);
                         break;                    
                     default:
                         SetErrorMessage("Unknown gamestate_sudoku"); SetErrorIndentfyer("main: SudokuState control");

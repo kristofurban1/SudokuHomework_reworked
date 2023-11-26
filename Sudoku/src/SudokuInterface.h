@@ -14,15 +14,17 @@
 
 #include "Sudoku.h"
 
+/*
+    @brief Gets parameters from mainmenu or endscreen and calls Generate Board.
+*/
 extern void GenerateSudoku(int size, int diff, bool hl, int cheat);
 
-extern void RenderHelpButton();
-extern void RenderBackButton();
-extern void RenderGrid();
-extern void RenderCell(int x, int y, int val, int visual);
+/*
+    @brief Called by mainloop, displays Sudoku game and interface.
+    @description Displays sudoku board, exit and help button. Handles keyboard and mouse interactions with the game.
+    @param cursorClick Cursor click position, if there was one. If not input {-1, -1}
+    @param keypress Pressed key scancose, if there was one. If not input SDL_SCANCODE_UNKNOWN
+*/
 extern void SudokuInterface_MainLoop(SDL_Point cursorClick, SDL_Scancode keypress);
-
-
-extern void SudokuGameCompleted();
 
 #endif

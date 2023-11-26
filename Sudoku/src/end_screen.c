@@ -2,6 +2,14 @@
 
 static SDL_Point cursorClickPos;
 
+/*
+    Render_xxx
+        static functions that break down the mainloop, they do not take parameters and dont return anything.
+        @important Some that handle keypress or mouseclick will expect cursorClickPos to be set correctly.
+        @memory The textures rendered may take larger amounts of memory based on Window Size, 
+            homewer as soon as they are allocated they will be freed so they don't add up to anything substential.
+*/
+
 static void Render_PlayAgain(){
     char *text = "Play again";
     int render_w, render_h;
@@ -180,7 +188,7 @@ static void RenderLeaderboard(){
     free(entries);
 }
 
-extern void EndScreen_MainLoop(SDL_Point cursorClick, SDL_Scancode keypress){
+extern void EndScreen_MainLoop(SDL_Point cursorClick){
     cursorClickPos = cursorClick;
 
     SetRenderDrawSDLColor(MainRenderer, C_Black);

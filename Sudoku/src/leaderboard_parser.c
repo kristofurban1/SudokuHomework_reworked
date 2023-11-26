@@ -1,5 +1,15 @@
 #include "leaderboard_parser.h"
 
+/*
+    @brief Flters entry array
+    @description Iterates over array and copies mathces to new array.
+    @param entrycount_out Returns the number of entries in sorted and filtered array.
+    @param b_size Size of sudoku board to filter by.
+    @param diff Difficulty of game to filter by.
+    @param cheats Cheats to filter by.
+
+    @returns Leaderboard entry array that is filtered.
+*/
 static struct Leaderboard_Entry* FilterEntries(struct Leaderboard_Entry* entries, int entrycount, int *entrycount_out, int b_size, int diff, int cheats){
 
     struct Leaderboard_Entry* filtered = malloc(sizeof(struct Leaderboard_Entry) * entrycount);
@@ -24,6 +34,15 @@ static struct Leaderboard_Entry* FilterEntries(struct Leaderboard_Entry* entries
     return filtered;
 }
 
+/*
+    @brief Sorts leaderboard array
+    @description Usinf selection sort algorithm, sorts array in ascending order.
+
+    @param entries Entries to sort
+    @param entrycount Numbe rof entries
+
+    @returns Leaderboard entry array that is sorted.
+*/
 static void SortEntries(struct Leaderboard_Entry* entries, int entrycount){
     int start = 0;
     while (start < entrycount -1)

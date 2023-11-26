@@ -2,6 +2,11 @@
 
 char *BasePath;
 
+/*
+    @brief Check if file at path exists.
+    @param filename name and path of file.
+    @returns True if file exists, False if it doesn't.
+*/
 static bool FileExists(const char *filename){
     FILE *fp = fopen(filename, "r");
     if (fp != NULL){
@@ -11,6 +16,9 @@ static bool FileExists(const char *filename){
     return false;
 }
 
+/*
+    @brief Concatination of paths.
+*/
 static char *AppendToBasePath(char *endOfPath, char *basePath){
     int eop_len  = strlen(endOfPath);
     int base_len = strlen(basePath);
@@ -22,6 +30,8 @@ static char *AppendToBasePath(char *endOfPath, char *basePath){
     
     return final;
 }
+
+
 extern struct SaveData *GetDefaultSaveData(){
     struct SaveData *def = malloc(sizeof(SaveData));
         SetErrorIndentfyer("file_handler: GetDefaultSaveData"); malloc_verify(def);

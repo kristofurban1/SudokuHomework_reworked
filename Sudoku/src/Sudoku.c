@@ -132,6 +132,9 @@ extern void GenerateBoard(int boardsize, uint64_t timerStart, void (*SudokuCompl
 
 }
 
+/*
+    @brief Checks if board is filled, if yes, verifys every rule and if there are no errors calls GameCompletion callback.
+*/
 static void CheckCompletion(){
     for (int i = 0; i < GetBoardTotalSize(); i++)
         if (SudokuGame[i] == 0) return;
@@ -152,8 +155,17 @@ static void CheckCompletion(){
     
 }
 
+/*
+    @brief Resets highlightmapto all normal(0);
+*/
 static void ResetHighlightMap() { memset(HighlightMap, 0, sizeof(int) * GetBoardTotalSize()); };
 
+/*
+    @brief Sets selected cell based on user input.
+    @description Highlights cell selected by user, if user has highlights enabled, it sets
+        highlited status on every cell containing same value, if user selects empty cell, 
+        it highlights based on the last not empty selected cell's value.
+*/
 static void SetActiveI(int activeI){
     
     if (SudokuGame[activeI] != 0)

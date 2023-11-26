@@ -13,6 +13,9 @@
 #define COLOR_Red           {255, 30, 30, 255}
 #define COLOR_Yellow        {255, 255, 30, 255}
 
+/*
+    Colors used by renderer.
+*/
 extern SDL_Color C_Green;
 extern SDL_Color C_DarkGreen;
 extern SDL_Color C_White;
@@ -22,7 +25,12 @@ extern SDL_Color C_Black;
 extern SDL_Color C_Red;
 extern SDL_Color C_Yellow;
 
-
+/*
+    @brief Simplifys render color changing.
+    @description SDL_SetRenderDrawColor uses 4 separate argb values, this is an alternative that uses SDL_Color.
+    @param renderer SDL_Renderer tharget.
+    @param color Color to change renderer draw color. 
+*/
 extern void SetRenderDrawSDLColor(SDL_Renderer *renderer, SDL_Color color);
 
 #endif

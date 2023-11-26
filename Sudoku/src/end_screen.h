@@ -14,7 +14,11 @@
 #include "SudokuInterface.h"
 #include "leaderboard_parser.h"
 
-
-extern void EndScreen_MainLoop(SDL_Point cursorClick, SDL_Scancode keypress);
+/*
+    @brief Called by mainloop, displays end screen.
+    @description Displays leaderboard, gives option to user to return to menu or start new game.
+    @param cursorClick Cursor click position, if there was one. If not input {-1, -1}
+*/
+extern void EndScreen_MainLoop(SDL_Point cursorClick);
 
 #endif

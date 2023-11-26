@@ -18,8 +18,14 @@ extern enum SudokuState{
     GS_UNSET = 3
 } SudokuState;
 
+/*
+    @brief Loads default gamestates.
+*/
 extern void Gamestate_Init();
 
+/*
+    @brief Gets-Sets Sudoku- and Game-states.
+*/
 extern int GetGamestate();
 extern void SetGameState(int newState);
 extern int GetSudokustate();

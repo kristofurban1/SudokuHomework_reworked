@@ -8,7 +8,39 @@ static int diff;
 static bool hl;
 static int cheat;
 
-void GenerateSudoku(int _size, int _diff, bool _hl, int _cheat){
+/*
+    @brief Gets called by GameCompletedCallback, appends game to leaderboard and calls endscreen.
+*/
+static void SudokuGameCompleted(){
+    printf("SudokuInterface: Game completed callback.\n");
+    SetGameState(GS_SudokuState);
+    SetSudokuState(GS_SudokuEndScreen);
+    FreeBoards();
+
+    uint64_t timeEnlapsed = SDL_GetTicks64() - GetSudokuTimerStart();
+
+    int entryCount;
+    struct Leaderboard_Entry *entires = ReadLeaderboard(&entryCount);
+
+    // Add 1 extra spot;
+    if (entryCount == 0) 
+        entires = malloc(sizeof(struct Leaderboard_Entry)); 
+    else 
+        entires = realloc(entires, sizeof(struct Leaderboard_Entry) * (entryCount+1)); 
+    malloc_verify(entires);
+
+    entires[entryCount].BoardSize = size;
+    entires[entryCount].u16CheatLevel = (cheat << 1 ) | (hl & 1);
+    entires[entryCount].u16Difficulty = diff;
+    entires[entryCount].Seconds = timeEnlapsed / 1000;
+    entryCount++;
+    
+    WriteLeaderboard(entires, entryCount);
+    free(entires);
+}
+
+
+extern void GenerateSudoku(int _size, int _diff, bool _hl, int _cheat){
 
     size  = _size; 
     diff  = _diff;
@@ -43,7 +75,15 @@ void GenerateSudoku(int _size, int _diff, bool _hl, int _cheat){
 static SDL_Point start;
 static SDL_Point end;
 
-extern void RenderHelpButton(){
+/*
+    Render_xxx
+        static functions that break down the mainloop, they do not take parameters and dont return anything.
+        @important Some that handle keypress or mouseclick will expect cursorClickPos to be set correctly.
+        @memory The textures rendered may take larger amounts of memory based on Window Size, 
+            homewer as soon as they are allocated they will be freed so they don't add up to anything substential.
+*/
+
+static void RenderHelpButton(){
     char text[10];
     if (GetAvailableHelp() < 0) sprintf(text, "Help");
     else sprintf(text, "Help (%d)", GetAvailableHelp());
@@ -77,7 +117,7 @@ extern void RenderHelpButton(){
     }
 }
 
-extern void RenderBackButton(){
+static void RenderBackButton(){
     char *text = "Back";
     int render_w, render_h;
     SDL_Texture *rendered_text = RenderFont(MainRenderer, GetFont(), text, C_White, &render_w, &render_h);
@@ -107,7 +147,7 @@ extern void RenderBackButton(){
 
 }
 
-extern void RenderGrid(){
+static void RenderGrid(){
     int boardSize = end.x - start.x;
     float cellSize  = (float)boardSize / GetBoardDimension();
     SetRenderDrawSDLColor(MainRenderer, C_Gray);
@@ -129,7 +169,7 @@ extern void RenderGrid(){
     }
     
 }
-extern void RenderCell(int x, int y, int val, int visual){
+static void RenderCell(int x, int y, int val, int visual){
     int boardSize = end.x - start.x;
     float cellSize  = (float)boardSize / GetBoardDimension();
 
@@ -224,7 +264,7 @@ static void RenderTimer(){
     SDL_DestroyTexture(rendered_text);
 }
 
-void SudokuInterface_MainLoop(SDL_Point cursorclick, SDL_Scancode _keypress){
+extern void SudokuInterface_MainLoop(SDL_Point cursorclick, SDL_Scancode _keypress){
     cursorClick = cursorclick;
     keypress = _keypress;
 
@@ -276,32 +316,4 @@ void SudokuInterface_MainLoop(SDL_Point cursorclick, SDL_Scancode _keypress){
     else if (!(keypress < 89 || keypress > 97)) WriteToCell(keypress - 88);
     else if (keypress == 53 || keypress == 98)  WriteToCell(0);
 
-}
-
-extern void SudokuGameCompleted(){
-    printf("SudokuInterface: Game completed callback.\n");
-    SetGameState(GS_SudokuState);
-    SetSudokuState(GS_SudokuEndScreen);
-    FreeBoards();
-
-    uint64_t timeEnlapsed = SDL_GetTicks64() - GetSudokuTimerStart();
-
-    int entryCount;
-    struct Leaderboard_Entry *entires = ReadLeaderboard(&entryCount);
-
-    // Add 1 extra spot;
-    if (entryCount == 0) 
-        entires = malloc(sizeof(struct Leaderboard_Entry)); 
-    else 
-        entires = realloc(entires, sizeof(struct Leaderboard_Entry) * (entryCount+1)); 
-    malloc_verify(entires);
-
-    entires[entryCount].BoardSize = size;
-    entires[entryCount].u16CheatLevel = (cheat << 1 ) | (hl & 1);
-    entires[entryCount].u16Difficulty = diff;
-    entires[entryCount].Seconds = timeEnlapsed / 1000;
-    entryCount++;
-    
-    WriteLeaderboard(entires, entryCount);
-    free(entires);
 }
